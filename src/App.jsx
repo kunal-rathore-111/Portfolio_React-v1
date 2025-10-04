@@ -5,7 +5,7 @@ import { useState } from "react";
 
 // files
 import { Nav } from "./componenets/Header/nav";
-import { Main } from "./componenets/main/main";
+import { Main } from "./componenets/Main/main.jsx";
 
 //icons 
 import { Sun, Moon } from "./assets/icons/darkMode";
@@ -29,7 +29,7 @@ export default function App() {
             < Main />
         </div>
 
-        <button className="fixed right-10 top-6 bg-gray-50 p-2 shadow-md  rounded-lg"
+        <button className="fixed right-10 top-5 bg-gray-50 p-2 shadow-md  rounded-lg"
             onClick={toggleMode}>
             {isDarkMode ? <Sun /> : <Moon />}
         </button>

@@ -18,8 +18,8 @@ export const Nav = () => {
         { to: "/", label: "Contact", Icon: ContactIcon }
     ]
 
-    return <nav className={`h-screen bg-white-400 transition-all duration-1000  ${toogle ? "w-18" : "w-40"} 
-        flex flex-col items-center justify-between border-r-1`}
+    return <nav className={`h-screen bg-white-400 dark:bg-black dark:text-white transition-all duration-1000  ${toogle ? "w-18" : "w-40"} pl-2 
+        flex flex-col items-center justify-between`}
         onMouseEnter={() => setToggle(false)}
         onMouseLeave={() => setToggle(true)}>
 
@@ -30,7 +30,7 @@ export const Nav = () => {
                 </Link>
             })}
         </div>
-        <span className="border-2 rounded px-2 mb-10 mx-1">
+        <span className="border-2 rounded px-2 mb-11 mx-1">
             <b>{toogle ? "." : "_"}</b>
         </span>
     </nav>

@@ -1,4 +1,12 @@
 
+import Prism from "prismjs";
+import "../../../assets/styles/prism-holi-theme.css"
+import "../../../assets/styles/prism-holi-theme-light.css"
+
+import "prismjs/components/prism-javascript"; // lang.
+import { useEffect } from "react";
+
+
 const code = {
     name: 'Nazmul Hossain',
     title: 'Full-Stack Developer | Cloud Enthusiast | Problem Solver',
@@ -21,15 +29,19 @@ const code = {
     }
 };
 
-const codeString = `This is code ${JSON.stringify(code, null, 2)}`
-
+const codeString = `const code = ${JSON.stringify(code, null, 2)}`
 
 export const HomePage = () => {
-    return (
-        <div className="h-screen flex flex-col justify-center mx-20">
 
-            <section className="flex flex-row items-center gap-8 justify-between" >
-                <div className="flex flex-col  gap-4">
+    useEffect(() => {
+        Prism.highlightAll();
+    }, []);
+
+    return (
+        <div className="h-screen flex flex-col justify-center mx-9">
+
+            <section className="flex flex-row items-start gap-8 justify-between " >
+                <div className="flex flex-col justify-start mt-30  h-full gap-4 ">
                     <div>
                         <h1 className="text-7xl font-[400]">Hello,</h1>
                         <h1 className="text-9xl font-[500]"> I'm Kunal</h1>
@@ -42,8 +54,12 @@ export const HomePage = () => {
                     </pre>
                 </div>
 
-                <div className='w-[600px] h-full'>
-                    {codeString}  {codeString}  {codeString}
+                <div className='w-[650px] mr-4'>
+                    <pre >
+                        <code className="language-javascript">
+                            {codeString}
+                        </code>
+                    </pre>
                 </div>
             </section>
 
