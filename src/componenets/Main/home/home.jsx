@@ -34,24 +34,22 @@ export const HomePage = () => {
     }, []);
 
     return (
-        <div className="h-screen flex flex-col justify-center mx-9">
+        <div className="h-screen flex flex-col justify-start lg:justify-center items-center mx-9">
 
-            <section className="flex flex-row items-start justify-between " >
+            <section className="flex flex-col lg:flex-row items-center justify-between md:gap-40" >
                 <div className="flex flex-col justify-start my-18 h-full gap-4 ">
-                    <div>
-                        <h1 className="text-8xl font-[400]">Hello,</h1>
-                        <h1 className="text-9xl font-[500]"> I'm Kunal</h1>
+                    <div >
+                        <h1 className="text-5xl md:text-8xl font-[400]">Hello,</h1>
+                        <h1 className="text-7xl md:text-9xl font-[500]"> I'm  Kunal </h1>
                     </div>
-                    <pre >I work with React Ecosystem, and write to teach people
-                        <br />
+                    <p>I work with React Ecosystem, and write to teach people
                         how to rebuild and redefine fundamental concepts through
-                        <br />
                         mental models.
-                    </pre>
+                    </p>
                 </div>
 
 
-                <div className="bg-gradient-to-r from-purple-400 via-violet-400 to-pink-400 p-1 rounded-xl mr-12">
+                <div className="bg-gradient-to-r from-purple-400 via-violet-400 to-pink-400 p-1 rounded-xl mr-12 w-[300px] md:w-auto">
                     <pre className="!m-0">
                         <code className="language-javascript">
                             {codeString}
@@ -59,7 +57,6 @@ export const HomePage = () => {
                     </pre>
                 </div>
             </section >
-
         </div >
     )
 }

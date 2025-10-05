@@ -30,7 +30,7 @@ export const Nav = () => {
                 </Link>
             })}
         </div>
-        <span className="border-2 rounded px-2 mb-11 mx-1">
+        <span className="border-2 rounded px-2 mb-18 mx-1">
             <b>{toogle ? "." : "_"}</b>
         </span>
     </nav>
