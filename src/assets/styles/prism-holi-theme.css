@@ -51,9 +51,9 @@ pre[class*='language-'] {
 	overflow: auto;
 }
 
-:not(pre) > code[class*='language-'] {
+:not(pre)>code[class*='language-'] {
 	color: #f0f6f6;
-	background: #2a4555;
+	background: hsl(202, 100%, 63%);
 	padding: 0.2em 0.3em;
 	border-radius: 0.2em;
 	box-decoration-break: clone;
@@ -89,7 +89,7 @@ pre[class*='language-'] {
 
 .token.string,
 .token.char {
-	color: #49c6ec;
+	color: #00c3ff;
 }
 
 .token.operator,
