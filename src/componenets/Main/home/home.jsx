@@ -34,18 +34,23 @@ export const HomePage = () => {
     }, []);
 
     return (
-        <div className="h-screen flex flex-col justify-start lg:justify-center items-center mx-9">
+        <div className="h-screen flex flex-col justify-start lg:justify-center items-center mx-11">
 
             <section className="flex flex-col lg:flex-row items-center justify-between md:gap-40" >
-                <div className="flex flex-col justify-start my-18 h-full gap-4 ">
+                <div className="flex flex-col justify-center my-18 h-full gap-4 ">
                     <div >
-                        <h1 className="text-5xl md:text-8xl font-[400]">Hello,</h1>
-                        <h1 className="text-7xl md:text-9xl font-[500]"> I'm  Kunal </h1>
+                        <h1 className="text-3xl md:text-4xl font-[300] 
+                        text-[#4B0096] dark:text-[#1BD05D]" >Hey there!, I'm-
+                        </h1>
                     </div>
-                    <p>I work with React Ecosystem, and write to teach people
-                        how to rebuild and redefine fundamental concepts through
-                        mental models.
-                    </p>
+                    <div className="pl-3 flex flex-col gap-4 w-[600px]">
+                        <h1 className="text-7xl md:text-[150px] font-[600]" >Kunal Rathore </h1>
+                        <p className="text-3xl font-[400]">
+                            Software Engineer Student.
+                            <span className="text-gray-600 dark:text-slate-400 font-[300]"> A self-taught full-stack developer with an
+                                interest in Computer Science.</span>
+                        </p>
+                    </div>
                 </div>
 
 
