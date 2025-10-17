@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Link } from "react-router-dom";
 
 
-import { HomeIcon, ProjectIcon, EducationIcon, ContactIcon } from "../../assets/icons/sideBarIcon";
+import { HomeIcon, ProjectIcon, EducationIcon, BlogIcon } from "../../assets/icons/sideBarIcon";
 
 export const Nav = () => {
 
@@ -13,9 +13,9 @@ export const Nav = () => {
 
     const navItems = [
         { to: "/", label: "Home", Icon: HomeIcon },
-        { to: "/", label: "Projects", Icon: ProjectIcon },
         { to: "/", label: "Education", Icon: EducationIcon },
-        { to: "/", label: "Contact", Icon: ContactIcon }
+        { to: "/", label: "Projects", Icon: ProjectIcon },
+        { to: "/", label: "Blogs", Icon: BlogIcon }
     ]
 
     return <nav className={`h-screen bg-white-400 dark:bg-black dark:text-white transition-all duration-1000  ${toogle ? "w-18" : "w-40"} pl-2 
