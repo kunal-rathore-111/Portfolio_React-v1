@@ -43,44 +43,41 @@ export const HomePage = () => {
     }, []);
 
     return (
-        <div className="h-screen flex flex-col mt-26 ml-11 mr-14 gap-24 ">
-            <div >
-
-                {/* first section which will shown on landing */}
-                <section className="flex flex-row  items-center justify-between" >
-
-                    {/* left part for greeting and name */}
-                    <div className="flex flex-col justify-center  h-full gap-4 ">
-                        <GreetComp />
-                    </div>
-
-                    {/* right part, code themed my info */}
-                    <div className="bg-gradient-to-r from-purple-400 via-violet-400 to-pink-400 p-1 rounded-xl w-[300px] md:w-auto">
-                        <pre className="!m-0">
-                            <code className="language-javascript">
-                                {codeString}
-                            </code>
-                        </pre>
-                    </div>
-                </section >
-                {/* first section which will shown on landing */}
-            </div >
-            <section className="flex flex-row  items-center justify-between" >
+        <div className="h-full flex flex-col ml-11 mr-14">
+            {/* first section which will shown on landing */}
+            <section className="flex flex-row  items-center justify-between py-17" >
 
                 {/* left part for greeting and name */}
-                <div className="flex flex-col justify-center  gap-4 ">
-                    <span className="text-4xl font-extralight">About Me- </span>
-                    <span className="text-2xl">
-                        <p>
-                            I'm a pre-final year B.Tech student specializing in Information Technology, passionate about solving real-world problems through technology. With a strong foundation in programming, data structures, and web development, I'm continuously exploring new technologies and working on projects that challenge me to grow.
-                        </p>
-                        <br />
-                        <p> Currently honing my skills in [your current focus areas, e.g., full-stack development, cloud computing, or machine learning], I'm actively looking for internship opportunities to apply my knowledge in real-world scenarios and contribute to impactful projects. I thrive in collaborative environments, enjoy learning from others, and am eager to take on challenges that push my boundaries.</p>
-                        <br />
-                        <p>
-                            When I’m not coding, you’ll find me exploring tech blogs, participating in hackathons, or experimenting with side projects.
-                        </p>
-                    </span>
+                <div className="flex flex-col justify-center  h-full gap-4 ">
+                    <GreetComp />
+                </div>
+
+                {/* right part, code themed my info */}
+                <div className="bg-gradient-to-r from-purple-400 via-violet-400 to-pink-400 p-1 rounded-xl w-[300px] md:w-auto">
+                    <pre className="!m-0">
+                        <code className="language-javascript">
+                            {codeString}
+                        </code>
+                    </pre>
+                </div>
+            </section >
+            {/* first section which will shown on landing */}
+            <section className="flex flex-row  items-center justify-end py-30" >
+
+                {/* left part for greeting and name */}
+                <div className="flex flex-col justify-center  gap-4   w-[50%] ">
+                    <div className="flex flex-col w-150 font-light dark:font-extralight">
+                        <span className="text-4xl ">About Me- </span>
+                        <span className="text-xl">
+                            <p>
+                                <br />
+                                I'm a pre-final year B.Tech student specializing in Information Technology, passionate about solving real-world problems through technology. With a strong foundation in programming, data structures, and web development, I'm continuously exploring new technologies and working on projects that challenge me to grow.
+                            </p>
+                            <br />
+                            <p> Currently honing my skills in <span className=" text-fuchsia-600  dark:text-lime-500 dark:font-light"> Web Development </span>, I'm actively looking for internship opportunities to apply my knowledge in real-world scenarios and contribute to impactful projects. I thrive in collaborative environments, enjoy learning from others, and am eager to take on challenges that push my boundaries.</p>
+
+                        </span>
+                    </div>
                 </div>
             </section >
         </div>
@@ -91,11 +88,11 @@ export const HomePage = () => {
 const GreetComp = () => {
     return <div>
         <h1 className="text-3xl md:text-4xl font-[300] 
-                text-[#4B0096] dark:text-[#1BD05D]" >Hey there!, I'm-
+                text-[#4B0096] dark:text-yellow-300" >Hey there!, I'm-
         </h1>
 
         <div className="pl-3 flex flex-col gap-6 w-[600px]">
-            <h1 className="text-7xl md:text-[150px] font-[600]" >Kunal Rathore
+            <h1 className="text-7xl md:text-[150px] font-[600] text-black dark:text-gray-200 " >Kunal Rathore
             </h1>
             <DiscComp />
             <div className="flex gap-3">
