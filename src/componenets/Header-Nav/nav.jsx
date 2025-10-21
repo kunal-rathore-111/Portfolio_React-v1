@@ -6,7 +6,7 @@ export const Nav = () => {
 
     const [toogle, setToggle] = useState(true);
 
-    return <nav className={`h-screen bg-white-400 dark:bg-black dark:text-white transition-all duration-1000  ${toogle ? "w-18" : "w-40"} pl-2 
+    return <nav className={`h-screen bg-white-400 dark:bg-black dark:text-white transition-all duration-1000  ${toogle ? "w-[8vw]" : "w-[14vw]"} pl-2 
         flex flex-col items-center justify-between`}
         onMouseEnter={() => setToggle(false)}
         onMouseLeave={() => setToggle(true)}>

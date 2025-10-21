@@ -1,11 +1,11 @@
 
 // using prism for styling code block of profile
 import Prism from "prismjs";
-import "../../../assets/styles/prism-holi-theme.css"
+import "../../assets/styles/prism-holi-theme.css"
 
 import "prismjs/components/prism-javascript"; // importing language
 import { useEffect } from "react";
-import profileImg from "../../../assets/profile.png"
+import profileImg from "../../assets/profile.png"
 
 import { Linkedin, Github, Mail } from "lucide-react";
 
