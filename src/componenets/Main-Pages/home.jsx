@@ -5,7 +5,6 @@ import "../../assets/styles/prism-holi-theme.css"
 
 import "prismjs/components/prism-javascript"; // importing language
 import { useEffect } from "react";
-import profileImg from "../../assets/profile.png"
 
 import { Linkedin, Github, Mail } from "lucide-react";
 
@@ -30,9 +29,9 @@ const codeString = `const Profile = {
 
 
 const Contact = [
-    { title: "Github", icon: <Github />, navigateLink: 'https://github.com/Kunal-Rathore-5' },
-    { title: "Email", icon: <Mail />, navigateLink: 'https://mail.google.com/mail/?view=cm&fs=1&to=kunalworkspace111@gmail.com' },
-    { title: "Linkdin", icon: <Linkedin />, navigateLink: '' }
+    { title: "Github", icon: <Github strokeWidth={1.5} />, navigateLink: 'https://github.com/Kunal-Rathore-5' },
+    { title: "Email", icon: <Mail strokeWidth={1.5} />, navigateLink: 'https://mail.google.com/mail/?view=cm&fs=1&to=kunalworkspace111@gmail.com' },
+    { title: "Linkdin", icon: <Linkedin strokeWidth={1.5} />, navigateLink: '' }
 ]
 
 
@@ -44,9 +43,9 @@ export const HomePage = () => {
     }, []);
 
     return (
-        <div className="h-full flex flex-col ml-11 mr-14">
+        <div className="h-full w-full flex flex-col justify-between">
             {/* first section which will shown on landing */}
-            <section className="flex flex-row  items-center justify-between py-17" >
+            <section className="flex flex-row  items-center justify-between" >
 
                 {/* left part for greeting and name */}
                 <div className="flex flex-col justify-center  h-full gap-4 ">
@@ -62,16 +61,7 @@ export const HomePage = () => {
                     </pre>
                 </div>
             </section >
-            {/* second section  */}
-            <section className="flex flex-row  items-center justify-evenly py-30" >
 
-                {/* image div */}
-                <img src={profileImg} alt="profileImg" className="rounded-xl h-100  shadow-xl" />
-                {/* rigth part for about me */}
-                <div className="flex flex-col justify-center  gap-4   w-[50%] ">
-                    <AboutComp />
-                </div>
-            </section >
         </div>
     )
 }
@@ -113,7 +103,7 @@ const ContactDiv = (props) => {
     return (
         <a href={props.navigateLink} target="_blank">
             <span
-                className="text-xl font-light  border-2 border-slate-500 py-1 px-2 rounded cursor-pointer flex gap-2 items-center">
+                className="text-lg font-light border-2  py-1 px-3 rounded-lg cursor-pointer flex gap-2 items-center ">
 
                 {props.icon ? props.icon : ""}
                 <span>{props?.title}</span>
@@ -121,19 +111,4 @@ const ContactDiv = (props) => {
             </span>
         </a>
     )
-}
-
-const AboutComp = () => {
-    return <div className="flex flex-col w-150 font-light dark:font-extralight">
-        <span className="text-4xl ">About Me- </span>
-        <span className="text-xl">
-            <p>
-                <br />
-                I'm a pre-final year B.Tech student specializing in Information Technology, passionate about solving real-world problems through technology. With a strong foundation in programming, data structures, and web development, I'm continuously exploring new technologies and working on projects that challenge me to grow.
-            </p>
-            <br />
-            <p> Currently honing my skills in <span className=" text-fuchsia-600  dark:text-lime-500 dark:font-light"> Web Development </span>, I'm actively looking for internship opportunities to apply my knowledge in real-world scenarios and contribute to impactful projects. I thrive in collaborative environments, enjoy learning from others, and am eager to take on challenges that push my boundaries.</p>
-
-        </span>
-    </div>
 }
