@@ -28,6 +28,8 @@ export default function App() {
 
             <div className="h-screen w-screen flex box-border ">
 
+                <div className="m-5 text-lgflex justify-center fixed gap-2  dark:bg-black dark:text-lime-400  p-2 ring-2 rounded-xl" > Project status- Working </div>
+
                 {/* dark mode toggle button */}
                 <button className="fixed right-10 top-5 bg-gray-50 p-2 shadow-md  rounded-lg"
                     onClick={toggleMode}>
@@ -37,13 +39,14 @@ export default function App() {
                 {/* navbar */}
                 <Nav></Nav>
 
+
                 {/* Main pages*/}
                 <main className="h-full flex-grow overflow-y-scroll text-black bg-white dark:text-white dark:bg-black py-20 pl-10 pr-10">
                     <Routes>
                         <Route path="/home" element={<HomePage />} />
                         <Route path="/about" element={<AboutPage />} />
                         <Route path="/projects" element={<ProjectsPage />} />
-                        <Route path="/blogs" element={<HomePage />} />
+                        {/* <Route path="/blogs" element={<HomePage />} /> */}
                         <Route path="/*" element={<ErrorPage />} />
                     </Routes>
                 </main>
