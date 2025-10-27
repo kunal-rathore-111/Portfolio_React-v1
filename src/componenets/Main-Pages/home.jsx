@@ -29,9 +29,9 @@ const codeString = `const Profile = {
 
 
 const Contact = [
-    { title: "Github", icon: <Github strokeWidth={1.5} />, navigateLink: 'https://github.com/Kunal-Rathore-5' },
+    { title: "Github", icon: <Github strokeWidth={1.5} />, navigateLink: 'https://github.com/kunal-rathore-111' },
     { title: "Email", icon: <Mail strokeWidth={1.5} />, navigateLink: 'https://mail.google.com/mail/?view=cm&fs=1&to=kunalworkspace111@gmail.com' },
-    { title: "Linkdin", icon: <Linkedin strokeWidth={1.5} />, navigateLink: '' }
+    // { title: "Linkdin", icon: <Linkedin strokeWidth={1.5} />, navigateLink: '' }
 ]
 
 
