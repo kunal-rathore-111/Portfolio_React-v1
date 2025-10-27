@@ -11,21 +11,23 @@ import { Linkedin, Github, Mail } from "lucide-react";
 const codeString = `const Profile = {
   name: 'Kunal Rathore',
   title: 'Full-Stack Developer | Problem Solver',
-  skills: [
-    'React', 'TypeScript', 'Express', 'Node.js',
-    'MySQL', 'MongoDB', 'Redis',
-    'AWS', 'GraphQL', 'Figma',
-    'Git', 'Linux'....
+
+  technologies: [
+    'C', 'C++', 'HTML', 'CSS', 'JS', 'NODE.js',
+    'Express', 'MySQL', 'MongoDB', 'REACT',
+    'Typescript', 'Figma', 'Git', 'Linux-OS',
+    Understanding more...
   ],
+
   problemSolver: true,
   hireable: function () {
     return (
       this.hardWorker &&
       this.problemSolver &&
       this.skills.length >= 5 &&
+      this.enjoy's_whatever_he_do
     );
-  }
-};`;
+  }};`;
 
 
 const Contact = [

@@ -10,7 +10,7 @@ import { SunMedium, Moon } from "lucide-react";
 
 
 import { ErrorPage } from "./componenets/Main-Pages/ErrorPage.jsx";
-import { HomePage } from "./componenets/Main-Pages/home.jsx";
+import { HomePage } from "./componenets/Main-Pages/Home.jsx";
 import { AboutPage } from "./componenets/Main-Pages/About.jsx";
 import { ProjectsPage } from "./componenets/Main-Pages/Projects.jsx";
 
@@ -41,12 +41,12 @@ export default function App() {
 
 
                 {/* Main pages*/}
-                <main className="h-full flex-grow overflow-y-scroll text-black bg-white dark:text-white dark:bg-black py-20 pl-10 pr-10">
+                <main className="h-full w-full flex-grow overflow-y-scroll text-black bg-white dark:text-white dark:bg-black pt-20 pl-10 pr-10">
                     <Routes>
                         <Route path="/home" element={<HomePage />} />
                         <Route path="/about" element={<AboutPage />} />
                         <Route path="/projects" element={<ProjectsPage />} />
-                        {/* <Route path="/blogs" element={<HomePage />} /> */}
+                        {/* <Route path="/reads" element={<HomePage />} /> */}
                         <Route path="/*" element={<ErrorPage />} />
                     </Routes>
                 </main>
