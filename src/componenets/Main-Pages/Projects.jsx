@@ -17,7 +17,7 @@ export const ProjectsPage = () => {
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque explicabo dolore error et animi commodi minima sunt deleniti. A veritatis soluta voluptatem at officiis accusamus nesciunt harum nemo! Perferendis, quam?
                 </p>
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat, nihil.
+                    Technologies
                 </p>
             </section>
         </div>
