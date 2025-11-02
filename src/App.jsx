@@ -28,10 +28,10 @@ export default function App() {
 
             <div className="h-screen w-screen flex box-border ">
 
-                <div className="m-5 text-lgflex justify-center fixed gap-2  dark:bg-black dark:text-lime-400  p-2 ring-2 rounded-xl" > Project status- Working </div>
+                <div className="m-5 text-lgflex justify-center fixed gap-2  dark:bg-black dark:text-lime-400  p-2 ring-2 rounded-xl z-11" > Project status- Working </div>
 
                 {/* dark mode toggle button */}
-                <button className="fixed right-10 top-5 bg-gray-50 p-2 shadow-md  rounded-lg"
+                <button className="fixed z-12 right-10 top-5 bg-gray-50 p-2 shadow-md rounded-lg"
                     onClick={toggleMode}>
                     {isDarkMode ? <SunMedium strokeWidth={1.5} /> : <Moon strokeWidth={1.5} />}
                 </button>
