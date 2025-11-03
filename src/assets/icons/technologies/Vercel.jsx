@@ -1,10 +1,10 @@
-export default function Vercel() {
+export default function Vercel({ color = "currentColor" }) {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 128 128"
-            className={""}
-            fill="currentColor"
+            fill={color}
+            className="size-6"
         >
             <path d="M64.002 8.576 128 119.424H0Zm0 0"></path>
         </svg>

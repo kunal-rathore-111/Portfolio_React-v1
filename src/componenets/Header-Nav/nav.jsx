@@ -15,7 +15,7 @@ export const Nav = () => {
             <NavComps toogle={toogle} />
         </div>
 
-        <span className="border-2 rounded px-2 mb-18 mx-1">
+        <span className="border-2 border-white rounded px-2 mb-18 mx-1">
             <b>{toogle ? "." : "_"}</b>
         </span>
     </nav>

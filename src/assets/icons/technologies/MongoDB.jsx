@@ -1,6 +1,11 @@
-export default function MongoDB() {
+export default function MongoDB({ color = "currentColor" }) {
     return (
-        <svg viewBox="0 0 128 128">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 128 128"
+            fill="none"
+            className="size-6"
+        >
             <path
                 fillRule="evenodd"
                 clipRule="evenodd"

@@ -1,4 +1,4 @@
-export default function Cursor() {
+export default function Cursor({ color = "currentColor" }) {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
