@@ -20,11 +20,14 @@ import Readmore from "../../assets/icons/technologies/Readmore";
 import Link from "../../assets/icons/technologies/Link"
 
 
+import ToolTipEffect from "@/components/ui/tooltip";
+
+
 const ProjectsData = [
     {
         topicName: "VSCode Dark Theme",
         discription: "A modern dark theme for Visual Studio Code built with developers in mind. It offers balanced contrast, vibrant syntax colors, and smooth visual flow to keep focus during long coding hours. Designed for consistency across UI elements and readability in any environment.",
-        icons: [JSON, Cursor, VS, Github,],
+        icons: [{ "JSON": JSON }, { "Cursor": Cursor }, { "VS": VS }, { "Github": Github }],
         deployLink: "https://marketplace.visualstudio.com/items?itemName=KunalRathore.kunal-dark-dev-theme",
         github: "https://github.com/kunal-rathore-111/dark-dev-theme.git",
         readmore: "will add later",
@@ -86,7 +89,6 @@ const ProjectInfoDivLeft = (props) => {
 
             ></div>
 
-
             <img src={themepng} alt="" className="h-[50vh] w-[44vw] object-cover" />
         </div>
 
@@ -97,26 +99,21 @@ const ProjectInfoDivLeft = (props) => {
 
             <p className="bg-gray-800 dark:bg-white shadow-sm shadow-slate-900 rounded-md p-6 flex flex-col  text-white dark:text-black gap-6 ml-2">
                 {props?.discription}
-                <span>
-                    <p className="flex gap-4">
-                        {props?.icons.map((Icon) => {
-                            return <span className=" size-6"><Icon /></span>
-                        })}
-                    </p>
-                </span>
+
+                <p className="flex gap-4">
+                    {props?.icons.map((iconObj, i) => {
+                        if (!iconObj || Object.entries(iconObj).length === 0) return null;
+                        const [name, Icon] = Object.entries(iconObj)[0]
+                        return <span key={i} className=" size-6"><ToolTipEffect Icon={Icon} name={name} /></span>
+                    })}
+                </p>
 
             </p>
             <div className="flex gap-3 ml-2">
-                <span>
-                    <a href={props.deployLink} target="_blank" rel="noopener noreferrer"><Link /></a>
-                </span>
-                <span>
-                    <a href={props.github} target="_blank" rel="noopener noreferrer"><Github /></a>
-                </span>
-                <span>
-                    {/* need to implement later via useNavigate SPA */}
-                    <span><Readmore /></span>
-                </span>
+                <a href={props.deployLink} target="_blank" rel="noopener noreferrer"><Link /></a>
+                <a href={props.github} target="_blank" rel="noopener noreferrer"><Github /></a>
+                {/* need to implement later via useNavigate SPA */}
+                <span><Readmore /></span>
 
             </div>
         </section >
@@ -142,26 +139,18 @@ const ProjectInfoDivRight = (props) => {
 
             <p className="bg-gray-800 dark:bg-white shadow-sm shadow-slate-900 rounded-md p-6 flex flex-col  text-white dark:text-black gap-6 items-end text-right mr-2">
                 <p> {props?.discription}</p>
-                <span>
-                    <p className="flex gap-4">
-                        {props?.icons.map((Icon) => {
-                            return <span className=" size-6"><Icon /></span>
-                        })}
-                    </p>
-                </span>
+                <p className="flex gap-4">
+                    {props?.icons.map((Icon) => {
+                        return <span className=" size-6"><Icon /></span>
+                    })}
+                </p>
 
             </p>
             <div className="flex gap-3 mr-2">
-                <span>
-                    <a href={props.deployLink} target="_blank" rel="noopener noreferrer"><Link /></a>
-                </span>
-                <span>
-                    <a href={props.github} target="_blank" rel="noopener noreferrer"><Github /></a>
-                </span>
-                <span>
-                    {/* need to implement later via useNavigate SPA */}
-                    <span><Readmore /></span>
-                </span>
+                <a href={props.deployLink} target="_blank" rel="noopener noreferrer"><Link /></a>
+                <a href={props.github} target="_blank" rel="noopener noreferrer"><Github /></a>
+                {/* need to implement later via useNavigate SPA */}
+                <span><Readmore /></span>
 
             </div>
         </section >

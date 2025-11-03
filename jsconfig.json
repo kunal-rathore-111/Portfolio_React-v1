@@ -1,0 +1,11 @@
+    /* it tells how the things are structured */
+    {
+        "compilerOptions": {
+            "baseUrl": ".",
+            "paths": {
+                "@/*": [
+                    "src/*"
+                ]
+            }
+        }
+    }

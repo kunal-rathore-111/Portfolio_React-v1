@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 
 export const ErrorPage = () => {
@@ -14,15 +13,11 @@ export const ErrorPage = () => {
         <div className="p-2 flex flex-col items-center gap-6">
             <span className="text-6xl">404</span>
             <span className="text-4xl">Page not found</span>
-            <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+
+
             <div className="text-2xl flex flex-col gap-3">
                 <span className="ring-2 ring-blue-800 hover:ring-green-500 py-1 px-2 rounded-xl cursor-pointer" onClick={navigateFunc} >Go to home page</span>
             </div>
         </div>
     </div>
 }
-
-
