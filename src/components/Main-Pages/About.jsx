@@ -3,17 +3,15 @@
 import profileImg from "../../assets/profile.png"
 
 export const AboutPage = () => {
-    return <div className="h-full flex flex-col items-start justify-center">
-        {/* second section  */}
-        <section className="flex flex-row  items-center justify-evenly " >
-            {/* image div */}
-            <img src={profileImg} alt="profileImg" className="rounded-xl h-100  shadow-xl" />
-            {/* rigth part for about me */}
-            <div className="flex flex-col justify-center  gap-4   w-[50%] ">
-                <AboutComp />
-            </div>
-        </section >
-    </div>
+    {/* second section  */ }
+    return <section className="h-full w-full flex flex-row items-center justify-evenly" >
+        {/* image div */}
+        <img src={profileImg} alt="profileImg" className="rounded-xl h-100  shadow-xl" />
+        {/* rigth part for about me */}
+        <div className="flex flex-col justify-center  gap-4 w-[50%] ">
+            <AboutComp />
+        </div>
+    </section >
 }
 
 

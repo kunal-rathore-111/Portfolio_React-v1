@@ -20,7 +20,7 @@ import Readmore from "../../assets/icons/technologies/Readmore";
 import LinkIcon from "../../assets/icons/technologies/Link"
 
 
-import ToolTipEffect from "@/components/ui/tooltip";
+import ToolTipEffect from "@/components/tooltip";
 
 const ProjectsData = [
     {
@@ -88,12 +88,12 @@ The application features user authentication todo management with CRUD operation
 
 import { ProjectContextProvider, useProject } from "@/context/ProjectContext";
 
-
+/* main function of the file */
 export const ProjectsPage = () => {
-    return <div className="h-full flex flex-col p-2">
-
+    return <div className="h-full flex flex-col p-2 ">
         <span className="text-3xl">Projects- </span>
-        <div className="flex flex-col gap-30">
+
+        <div className="flex flex-col">
             {ProjectsData.map((props, i) => {
                 // passing the data in p and the 0 or 1 for condtional alignment 
                 const index = i % 2;
@@ -111,7 +111,7 @@ export const ProjectsPage = () => {
 const ProjectInfoDiv = () => {
     const { index } = useProject();
     return (
-        <div className={`flex items-center ${index ? "justify-start" : "justify-end"}  relative mx-4 font-light`}>
+        <div className={`flex items-center ${index ? "justify-start" : "justify-end"}  relative mx-4 font-light my-20`}>
             <ProjectImageDiv />
             <ProjectTextDiv />
         </div >)

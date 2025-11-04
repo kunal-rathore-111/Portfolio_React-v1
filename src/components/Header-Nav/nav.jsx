@@ -11,11 +11,11 @@ export const Nav = () => {
         onMouseEnter={() => setToggle(false)}
         onMouseLeave={() => setToggle(true)}>
 
-        <div className="h-80 w-full  flex flex-col gap-14 items-center">
+        <div className="h-90 w-full  flex flex-col gap-14 items-center">
             <NavComps toogle={toogle} />
         </div>
 
-        <span className="border-2 border-white rounded px-2 mb-18 mx-1">
+        <span className="border-2 border-black dark:border-white rounded px-2 mb-18 mx-1">
             <b>{toogle ? "." : "_"}</b>
         </span>
     </nav>

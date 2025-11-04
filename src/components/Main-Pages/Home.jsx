@@ -30,12 +30,6 @@ const codeString = `const Profile = {
   }};`;
 
 
-const Contact = [
-    { title: "Github", icon: <Github strokeWidth={1.5} />, navigateLink: 'https://github.com/kunal-rathore-111' },
-    { title: "Email", icon: <Mail strokeWidth={1.5} />, navigateLink: 'https://mail.google.com/mail/?view=cm&fs=1&to=kunalworkspace111@gmail.com' },
-    // { title: "Linkdin", icon: <Linkedin strokeWidth={1.5} />, navigateLink: '' }
-]
-
 
 export const HomePage = () => {
 
@@ -45,26 +39,23 @@ export const HomePage = () => {
     }, []);
 
     return (
-        <div className="h-full w-full flex flex-col justify-between">
-            {/* first section which will shown on landing */}
-            <section className="flex flex-row  items-center justify-between" >
+        <section className="h-full w-full flex flex-row  items-center justify-between" >
 
-                {/* left part for greeting and name */}
-                <div className="flex flex-col justify-center  h-full gap-4 ">
-                    <GreetComp />
-                </div>
+            {/* left part for greeting and name */}
+            <div className="flex flex-col justify-center h-full gap-4 ">
+                <GreetComp />
+            </div>
 
-                {/* right part, code themed my info */}
-                <div className="bg-gradient-to-r from-purple-400 via-violet-400 to-pink-400 p-1 rounded-xl w-[300px] md:w-auto">
-                    <pre className="!m-0">
-                        <code className="language-javascript">
-                            {codeString}
-                        </code>
-                    </pre>
-                </div>
-            </section >
+            {/* right part, code themed my info */}
+            <div className="bg-gradient-to-r from-purple-400 via-violet-400 to-pink-400 p-1 rounded-xl w-[300px] md:w-auto">
+                <pre className="!m-0">
+                    <code className="language-javascript">
+                        {codeString}
+                    </code>
+                </pre>
+            </div>
+        </section >
 
-        </div>
     )
 }
 
@@ -96,6 +87,12 @@ const DiscComp = () => {
 }
 
 const ContactComps = () => {
+    const Contact = [
+        { title: "Github", icon: <Github strokeWidth={1.5} />, navigateLink: 'https://github.com/kunal-rathore-111' },
+        { title: "Email", icon: <Mail strokeWidth={1.5} />, navigateLink: 'https://mail.google.com/mail/?view=cm&fs=1&to=kunalworkspace111@gmail.com' },
+        // { title: "Linkdin", icon: <Linkedin strokeWidth={1.5} />, navigateLink: '' }
+    ]
+
     return <>
         {Contact.map((d) => { return <ContactDiv title={d.title} icon={d.icon} navigateLink={d.navigateLink} /> })}
     </>
@@ -104,13 +101,11 @@ const ContactComps = () => {
 const ContactDiv = (props) => {
     return (
         <a href={props.navigateLink} target="_blank">
-            <span
-                className="text-lg font-light border-2  py-1 px-3 rounded-lg cursor-pointer flex gap-2 items-center ">
-
+            <span className="text-lg font-light border-1 border-black dark:border-white py-1 px-3 rounded-lg cursor-pointer flex gap-3 items-center">
                 {props.icon ? props.icon : ""}
                 <span>{props?.title}</span>
 
-            </span>
+            </span >
         </a>
     )
 }
