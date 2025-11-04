@@ -164,7 +164,7 @@ const TechnologyIcons = () => {
             {props?.icons.map((iconObj, i) => {
                 if (!iconObj || Object.entries(iconObj).length === 0) return null;
                 const [name, Icon] = Object.entries(iconObj)[0];
-                return <span key={i} className=" size-6"><ToolTipEffect Icon={Icon} name={name} /></span>
+                return <span key={i} className=" size-6"><ToolTipEffect Icon={Icon} name={name} /> </span>
             })}
         </div>)
 }
