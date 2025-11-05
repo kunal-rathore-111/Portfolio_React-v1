@@ -5,9 +5,11 @@ import { Link } from "react-router-dom";
 import { HomeIcon, ProjectIcon, AboutIcon, ReadsIcon } from "../../assets/icons/sideBarIcon";
 import { useScrollContext } from "@/context/ScrollContext";
 
+import { useLenis } from "lenis/react";
 
-export const NavComps = ({ toogle }) => {
+export const NavComps = ({ toggle }) => {
     const { homeRef, AboutRef, ProjectsRef, ReadsRef } = useScrollContext();
+
 
     const navItems = [
         { ref: homeRef, label: "Home", Icon: HomeIcon },
@@ -16,15 +18,19 @@ export const NavComps = ({ toogle }) => {
         { ref: ReadsRef, label: "Reads", Icon: ReadsIcon }
     ]
 
+    const lenis = useLenis();
+
     const scrollToFunc = (ref) => {
-        ref?.current?.scrollIntoView({ behavior: "smooth" })
+        if (ref?.current) {
+            lenis?.scrollTo(ref.current, { offset: 0 });
+        }
     }
     return (<>
         {
             navItems.map(({ ref, label, Icon }) => {
                 return <div className="flex w-22 h-12 items-center justify-center gap-2 cursor-pointer"
                     onClick={() => scrollToFunc(ref)}>
-                    {toogle ? <Icon strokeWidth={1.5} /> : <span>{label}</span>}
+                    {toggle ? <Icon strokeWidth={1.5} /> : <span>{label}</span>}
                 </div>
             })
         }
