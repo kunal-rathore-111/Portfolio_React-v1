@@ -91,9 +91,9 @@ import { ProjectContextProvider, useProject } from "@/context/ProjectContext";
 /* main function of the file */
 export const ProjectsPage = () => {
     return <div className="h-full flex flex-col p-2 ">
-        <span className="text-3xl">Projects- </span>
+        {/* <span className="text-3xl">Projects- </span>
 
-        {/*  <div className="flex flex-col">
+          <div className="flex flex-col">
             {ProjectsData.map((props, i) => {
                 // passing the data in p and the 0 or 1 for condtional alignment 
                 const index = i % 2;
