@@ -14,7 +14,7 @@ export const NavComps = ({ toggle }) => {
     const navItems = [
         { ref: homeRef, label: "Home", Icon: HomeIcon },
         { ref: AboutRef, label: "About", Icon: AboutIcon },
-        { ref: ProjectsRef, label: "Projects", Icon: ProjectIcon },
+        // { ref: ProjectsRef, label: "Projects", Icon: ProjectIcon },
         // { ref: ReadsRef, label: "Reads", Icon: ReadsIcon }
     ]
 
