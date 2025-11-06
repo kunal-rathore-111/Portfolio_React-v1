@@ -43,7 +43,7 @@ export default function App() {
 
                         {/* Main pages*/}
                         <Routes>
-                            <Route path="/home" element={<MainComp />} />
+                            <Route path="/" element={<MainComp />} />
                             <Route path="/*" element={<ErrorPage />} />
                         </Routes>
 
