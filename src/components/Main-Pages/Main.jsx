@@ -17,7 +17,7 @@ export const MainComp = () => {
 
     return <ReactLenis root options={{ smoothWheel: true, duration: 4.5 }} >
         <ScrollHandler />
-        <main className={`h-full w-full flex flex-col text-black bg-white dark:text-white dark:bg-black pl-10 pr-18  transition-all duration-1000 ${toggle ? "pl-[10vw]" : "pl-[12vw]"}`}>
+        <main className={`w-full flex flex-col pl-10 pr-18  transition-all duration-1000 ${toggle ? "pl-[10vw]" : "pl-[12vw]"}`}>
             <div className="py-30" ref={homeRef} ><HomePage /></div>
             <div className="py-30" ref={AboutRef} ><AboutPage /></div>
             <div className="py-20" ref={ProjectsRef} ><ProjectsPage /></div>
