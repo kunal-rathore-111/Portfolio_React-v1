@@ -13,8 +13,8 @@ export const MainComp = () => {
 
 
     return <main className={`w-full flex flex-col pl-10 pr-18  transition-all duration-1000 ${toggle ? "pl-[10vw]" : "pl-[12vw]"}`}>
-        <div className="py-30" ref={homeRef} ><HomePage /></div>
-        <div className="py-30" ref={AboutRef} ><AboutPage /></div>
-        <div className="py-20" ref={ProjectsRef} ><ProjectsPage /></div>
+        <div className="py-18" ref={homeRef} ><HomePage /></div>
+        <div className="py-18" ref={AboutRef} ><AboutPage /></div>
+        <div className="py-10" ref={ProjectsRef} ><ProjectsPage /></div>
     </main>
 }
