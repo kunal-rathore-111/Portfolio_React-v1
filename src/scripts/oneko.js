@@ -107,7 +107,7 @@
         nekoEl.style.zIndex = 2147483647;
         nekoEl.style.cursor = "pointer";
 
-        let nekoFile = "./oneko.gif"
+        let nekoFile = "/oneko.gif" // Changed from "./oneko.gif" to "/oneko.gif"
         const curScript = document.currentScript
         if (curScript && curScript.dataset.cat) {
             nekoFile = curScript.dataset.cat
