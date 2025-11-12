@@ -1,5 +1,6 @@
-
 import themepng from "../../assets/projects/theme.png"
+import expensifypng from "../../assets/projects/expensify.png"
+import todopng from "../../assets/projects/todo.png"
 
 import TypeScript from "../../assets/icons/technologies/TypeScript";
 import React from "../../assets/icons/technologies/React";
@@ -15,12 +16,20 @@ import JSON from "../../assets/icons/technologies/JSON";
 import VS from "../../assets/icons/technologies/VS";
 import Cursor from '../../assets/icons/technologies/Cursor';
 import JavaScript from "@/assets/icons/technologies/JS";
+import HTML from "@/assets/icons/technologies/HTML";
+import CSS from "@/assets/icons/technologies/CSS";
 
 import Readmore from "../../assets/icons/technologies/Readmore";
 import LinkIcon from "../../assets/icons/technologies/Link"
 
 
 import ToolTipEffect from "@/components/tooltip";
+import { ProjectContextProvider, useProject } from "@/context/ProjectContext";
+import Git from "@/assets/icons/technologies/Git";
+import Mdx from "@/assets/icons/technologies/Mdx";
+import Vite from "@/assets/icons/technologies/Vite";
+import Figma from "@/assets/icons/technologies/Figma";
+import Npm from "@/assets/icons/technologies/Npm";
 
 const ProjectsData = [
     {
@@ -30,6 +39,11 @@ const ProjectsData = [
             { JSON },
             { VS },
             { Cursor },
+            { Git },
+            { Mdx },
+            { Vite },
+            { Figma },
+            { Npm },
         ],
         github: "https://github.com/kunal-rathore-111/dark-dev-theme.git",
         deployLink: "https://marketplace.visualstudio.com/items?itemName=KunalRathore.kunal-dark-dev-theme",
@@ -39,11 +53,12 @@ const ProjectsData = [
 
     {
         topicName: "Todo Web-Application",
-        discription: `A full-stack Todo application built with the MERN stack (MongoDB, Express.js, Node.js) and vanilla JavaScript frontend.
-The application features user authentication todo management with CRUD operations, and a responsive design.`,
+        discription: `A full-stack Todo application featuring secure user authentication, and a responsive design for seamless task management. Track their daily tasks efficiently.
+
+        Example Creds, Email- kunalx1@gmail.com password- Kunal@1234`,
         icons: [
-            /*  { HTML },
-             { CSS }, */
+            { HTML },
+            { CSS },
             { JavaScript },
             { NodeJs },
             { ExpressJs },
@@ -52,47 +67,30 @@ The application features user authentication todo management with CRUD operation
         github: `https://github.com/kunal-rathore-111/Todo_Project`,
         deployLink: `https://todo-project-kohl.vercel.app/`,
         readmore: "will add later",
-        image: themepng,
+        image: todopng,
     },
-
     {
-        topicName: "VSCode Dark Theme",
-        discription: "A modern dark theme for Visual Studio Code built with developers in mind. It offers balanced contrast, vibrant syntax colors, and smooth visual flow to keep focus during long coding hours. Designed for consistency across UI elements and readability in any environment.",
+        topicName: "Expensify - Expense Tracker Application",
+        discription: `A comprehensive full-stack expense tracking application designed to help users manage their finances effectively. Featured with a robust backend API and an intuitive frontend interface to help users organize and monitor their expenses efficiently.`,
         icons: [
-            { JSON },
-            { VS },
-            { Cursor },
+            { React },
+            { JavaScript },
+            { NodeJs },
+            { ExpressJs },
+            { MongoDB },
         ],
-        github: "https://github.com/kunal-rathore-111/dark-dev-theme.git",
-        deployLink: "https://marketplace.visualstudio.com/items?itemName=KunalRathore.kunal-dark-dev-theme",
+        github: `https://github.com/kunal-rathore-111/Expensify_Update_Project-2`,
+        deployLink: `https://expensify-update-project-2.vercel.app`,
         readmore: "will add later",
-        image: themepng,
+        image: expensifypng,
     },
-
-    {
-        topicName: "VSCode Dark Theme",
-        discription: "A modern dark theme for Visual Studio Code built with developers in mind. It offers balanced contrast, vibrant syntax colors, and smooth visual flow to keep focus during long coding hours. Designed for consistency across UI elements and readability in any environment.",
-        icons: [
-            { JSON },
-            { VS },
-            { Cursor },
-        ],
-        github: "https://github.com/kunal-rathore-111/dark-dev-theme.git",
-        deployLink: "https://marketplace.visualstudio.com/items?itemName=KunalRathore.kunal-dark-dev-theme",
-        readmore: "will add later",
-        image: themepng,
-    },
-
 
 ]
-
-import { ProjectContextProvider, useProject } from "@/context/ProjectContext";
 
 /* main function of the file */
 export const ProjectsPage = () => {
     return <div className="h-full flex flex-col p-2 ">
         <span className="text-3xl">Projects- </span>
-
         <div className="flex flex-col">
             {ProjectsData.map((props, i) => {
                 // passing the data in p and the 0 or 1 for condtional alignment 
@@ -120,13 +118,17 @@ const ProjectInfoDiv = () => {
 const ProjectImageDiv = () => {
     // accessing the project provider data
     const { props } = useProject();
-    return (<div className="relative">
+    return (<div className="relative rounded-xl overflow-hidden shadow-2xl border-2 border-gray-200 dark:border-gray-700 group">
 
-        <div className="absolute  transition-all duration-300 bg-gray-600 dark:bg-green-200 h-full w-full opacity-36 hover:opacity-0"
+        <div className="absolute transition-all duration-500 bg-gradient-to-br from-purple-500/40 via-pink-500/30 to-blue-500/40 dark:from-green-500/30 dark:via-emerald-400/25 dark:to-teal-500/30 h-full w-full opacity-40 group-hover:opacity-0 z-10"
         >
         </div>
 
-        <img src={props.image} alt="" className="h-[52vh] w-[44vw] object-cover" />
+        <img
+            src={props.image}
+            alt={props?.topicName || "Project preview"}
+            className="h-[52vh] w-[44vw] object-cover transition-transform duration-500 group-hover:scale-105"
+        />
     </div>)
 }
 
@@ -148,7 +150,7 @@ const ProjectDiscriptionDiv = () => {
 
         < div className={`bg-green-400 dark:bg-gray-900 shadow-sm shadow-slate-900 rounded-sm p-4 flex flex-col ${index ? "items-end" : "items-start"} gap-6 `}  >
 
-            {props?.discription}
+            <p className="whitespace-pre-line">{props?.discription}</p>
 
             < TechnologyIcons />
 
