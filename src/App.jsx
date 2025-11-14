@@ -17,7 +17,8 @@ import { MainComp } from "./components/Main-Pages/Main.jsx";
 import { ScrollContextProvider } from "./context/ScrollContext.jsx";
 import { NavToggleContextProvider } from "./context/NavToggleContext.jsx";
 import Footer from "./components/Footer.jsx";
-import Oneko from "./components/Oneko.jsx"; // Add this import
+import Oneko from "./components/Oneko.jsx"; // existing import
+import ChatBubble from "./components/ChatBubble.jsx"; // chatbot component
 
 export default function App() {
 
@@ -33,6 +34,8 @@ export default function App() {
             <ReactLenis root options={{ smoothWheel: true, duration: 3.7 }} >
                 <ScrollHandler />
                 <Oneko />
+                {/* Chatbot floating widget */}
+                <ChatBubble />
                 <div className="w-screen flex box-border ">
 
                     <div className="m-5 text-lgflex justify-center fixed gap-2 bg-gray-800  dark:bg-black text-emerald-300 dark:text-lime-400  p-2 ring-2 rounded-xl z-111" > Project status- Working... </div>
