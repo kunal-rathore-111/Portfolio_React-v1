@@ -6,326 +6,260 @@ import { Button } from '@/components/ui/button.jsx';
 import { ExpandableChat, ExpandableChatBody, ExpandableChatFooter, ExpandableChatHeader } from '@/components/ui/expandable-chat.jsx';
 import { Input } from '@/components/ui/input.jsx';
 import { ScrollArea } from '@/components/ui/scroll-area.jsx';
-import { chatSuggestions, systemPrompt, heroConfig } from '@/config/chatConfig.js';
+import { chatSuggestions, heroConfig, systemPrompt } from '@/config/chatConfig.js';
 import ReactMarkdown from 'react-markdown';
 import { cn } from '@/lib/utils';
 
 const initialMessages = [
-    {
-        id: 1,
-        text: "Hello! I'm your Portfolio Assistant. How can I help you?",
-        sender: 'bot',
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    },
+	{
+		id: 1,
+		text: `Hi! I'm ${heroConfig.name}. Ask me about my projects, skills, or experience.`,
+		sender: 'bot',
+		timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+	}
 ];
 
 export default function ChatBubble() {
-    const [messages, setMessages] = useState(initialMessages);
-    const [newMessage, setNewMessage] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [cooldownSeconds, setCooldownSeconds] = useState(0);
-    const scrollAreaRef = useRef(null);
+	const [messages, setMessages] = useState(initialMessages);
+	const [input, setInput] = useState('');
+	const [loading, setLoading] = useState(false);
+	const [cooldown, setCooldown] = useState(0);
+	const scrollRef = useRef(null);
 
-    // Auto-scroll to bottom when messages change
-    useEffect(() => {
-        if (scrollAreaRef.current) {
-            const scrollElement = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
-            if (scrollElement) {
-                scrollElement.scrollTop = scrollElement.scrollHeight;
-            }
-        }
-    }, [messages]);
+	useEffect(() => {
+		if (!scrollRef.current) return;
+		const el = scrollRef.current.querySelector('[data-radix-scroll-area-viewport]');
+		if (el) el.scrollTop = el.scrollHeight;
+	}, [messages]);
 
-    // Cooldown timer
-    useEffect(() => {
-        if (cooldownSeconds <= 0) return;
-        const timer = setInterval(() => {
-            setCooldownSeconds((s) => (s > 0 ? s - 1 : 0));
-        }, 1000);
-        return () => clearInterval(timer);
-    }, [cooldownSeconds]);
+	useEffect(() => {
+		if (cooldown <= 0) return;
+		const t = setInterval(() => setCooldown(s => (s > 0 ? s - 1 : 0)), 1000);
+		return () => clearInterval(t);
+	}, [cooldown]);
 
-    const handleSendMessage = async () => {
-        if (!newMessage.trim() || isLoading || cooldownSeconds > 0) return;
+	const sendMessage = async (messageText, botMessageId) => {
+		try {
+			const history = messages.slice(-10).map((msg) => ({
+				role: msg.sender === 'user' ? 'user' : 'model',
+				parts: [{ text: msg.text }],
+			}));
 
-        const messageText = newMessage.trim();
-        const userMessage = {
-            id: Date.now(),
-            text: messageText,
-            sender: 'user',
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        };
+			// Prefer env, otherwise use a dev-friendly fallback to the Node server
+			const apiBase =
+				import.meta.env.VITE_API_BASE ??
+				((window?.location?.hostname === 'localhost' || window?.location?.hostname === '127.0.0.1')
+					? 'http://localhost:5000/api'
+					: '/api');
 
-        setMessages((prev) => [...prev, userMessage]);
-        setNewMessage('');
-        setIsLoading(true);
+			if (!import.meta.env.VITE_API_BASE) {
+				console.warn('[Chat] VITE_API_BASE not set. Using fallback:', apiBase);
+			}
 
-        const botMessageId = Date.now() + 1;
-        const botMessage = {
-            id: botMessageId,
-            text: '',
-            sender: 'bot',
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            isStreaming: true,
-        };
-        setMessages((prev) => [...prev, botMessage]);
+			const response = await fetch(`${apiBase}/chat`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ message: messageText, history, systemPrompt }),
+			});
 
-        await sendMessage(messageText, botMessageId);
-    };
+			if (!response.ok) {
+				// Try to extract meaningful server error
+				let errorText = `HTTP error! status: ${response.status}`;
+				let parsed = null;
+				const raw = await response.text().catch(() => null);
+				try {
+					parsed = raw ? JSON.parse(raw) : null;
+				} catch { }
+				if (response.status === 429) {
+					const retryAfter = parsed?.retryAfter ?? 30;
+					setCooldown(retryAfter);
+					errorText = `Too many requests. Please wait ${retryAfter}s and try again.`;
+				} else if (parsed?.error) {
+					errorText = parsed.error;
+				} else if (raw) {
+					errorText = raw;
+				}
+				throw new Error(errorText);
+			}
 
-    const handleSuggestionClick = (suggestion) => {
-        if (isLoading || cooldownSeconds > 0) return;
+			if (response.body) {
+				const reader = response.body.getReader();
+				const decoder = new TextDecoder();
+				let accumulatedText = '';
+				while (true) {
+					const { done, value } = await reader.read();
+					if (done) {
+						setMessages((prev) =>
+							prev.map((msg) =>
+								msg.id === botMessageId ? { ...msg, text: accumulatedText, isStreaming: false } : msg
+							)
+						);
+						break;
+					}
+					const chunk = decoder.decode(value, { stream: true });
+					const lines = chunk.split('\n').filter((line) => line.trim() !== '');
+					for (const line of lines) {
+						try {
+							const data = JSON.parse(line);
+							if (data.text) {
+								accumulatedText += data.text;
+								setMessages((prev) =>
+									prev.map((msg) =>
+										msg.id === botMessageId ? { ...msg, text: accumulatedText, isStreaming: true } : msg
+									)
+								);
+							}
+							if (data.done) {
+								setMessages((prev) =>
+									prev.map((msg) =>
+										msg.id === botMessageId ? { ...msg, text: accumulatedText, isStreaming: false } : msg
+									)
+								);
+								break;
+							}
+						} catch {
+							continue;
+						}
+					}
+				}
+			}
+		} catch (error) {
+			console.error('Error sending message:', error);
+			setMessages((prev) =>
+				prev.map((msg) =>
+					msg.id === botMessageId
+						? {
+							...msg,
+							text:
+								"I'm sorry, I'm having trouble responding right now. Please try again later.",
+							isStreaming: false,
+						}
+						: msg
+				)
+			);
+		} finally {
+			setLoading(false);
+			setInput('');
+		}
+	}
 
-        setNewMessage(suggestion);
-        const userMessage = {
-            id: Date.now(),
-            text: suggestion,
-            sender: 'user',
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        };
-        setMessages((prev) => [...prev, userMessage]);
-        setIsLoading(true);
+	const handleSend = () => {
+		if (!input.trim() || loading || cooldown > 0) return;
 
-        const botMessageId = Date.now() + 1;
-        const botMessage = {
-            id: botMessageId,
-            text: '',
-            sender: 'bot',
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            isStreaming: true,
-        };
-        setMessages((prev) => [...prev, botMessage]);
-        sendMessage(suggestion, botMessageId);
-    };
+		const userMessage = {
+			id: Date.now(),
+			text: input.trim(),
+			sender: 'user',
+			timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+		};
 
-    const handleKeyPress = (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSendMessage();
-        }
-    };
+		const botMessage = {
+			id: Date.now() + 1,
+			text: '',
+			sender: 'bot',
+			timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+			isStreaming: true
+		};
 
-    const sendMessage = async (messageText, botMessageId) => {
-        try {
-            const history = messages.slice(-10).map((msg) => ({
-                role: msg.sender === 'user' ? 'user' : 'model',
-                parts: [{ text: msg.text }],
-            }));
+		setMessages((prev) => [...prev, userMessage, botMessage]);
+		setLoading(true);
+		sendMessage(input.trim(), botMessage.id);
+	};
 
-            const apiBase = import.meta.env.VITE_API_BASE || '/api';
-            const response = await fetch(`${apiBase}/chat`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: messageText, history }),
-            });
+	function handleKey(e) {
+		if (e.key === 'Enter' && !e.shiftKey) {
+			e.preventDefault();
+			handleSend();
+		}
+	}
 
-            if (!response.ok) {
-                let errorText = `HTTP error! status: ${response.status}`;
-                try {
-                    const data = await response.json();
-                    if (response.status === 429) {
-                        const retryAfter = data?.retryAfter ?? 30;
-                        setCooldownSeconds(Number(retryAfter));
-                        errorText = `Too many requests. Please wait ${retryAfter}s and try again.`;
-                    } else if (data?.error) {
-                        errorText = data.error;
-                    }
-                } catch (_) {
-                    // ignore parse error
-                }
-                setMessages((prev) =>
-                    prev.map((msg) =>
-                        msg.id === botMessageId
-                            ? { ...msg, text: errorText, isStreaming: false }
-                            : msg
-                    )
-                );
-                setIsLoading(false);
-                setNewMessage('');
-                return;
-            }
+	return (
+		<ExpandableChat position="bottom-right" size="lg" icon={<ChatBubbleIcon className="h-6 w-6" />}>
+			<ExpandableChatHeader>
+				<div className="flex items-center gap-3">
+					<Avatar className="h-10 w-10">
+						<AvatarImage src={heroConfig.avatar} alt="Assistant" />
+						<AvatarFallback>AI</AvatarFallback>
+					</Avatar>
+					<div className="text-sm">
+						<p className="font-semibold">Chat with {heroConfig.name}</p>
+						<p className="text-xs text-muted-foreground">Ask me about my work</p>
+					</div>
+				</div>
+			</ExpandableChatHeader>
 
-            const reader = response.body?.getReader();
-            const decoder = new TextDecoder();
-            if (!reader) throw new Error('No reader available');
+			<ExpandableChatBody>
+				<ScrollArea ref={scrollRef} className="h-[400px] p-4">
+					<div className="flex flex-col gap-4">
+						{messages.map(m => (
+							<div
+								key={m.id}
+								className={cn(
+									'rounded-lg px-3 py-2 max-w-[80%] text-sm',
+									m.sender === 'user'
+										? 'ml-auto bg-primary text-primary-foreground'
+										: 'bg-muted'
+								)}
+							>
+								{m.text ? (
+									<div className="prose prose-sm dark:prose-invert max-w-none">
+										<ReactMarkdown>{m.text}</ReactMarkdown>
+									</div>
+								) : (
+									m.isStreaming && <span className="text-muted-foreground">Thinking...</span>
+								)}
+								<p className="text-[10px] mt-1 opacity-60">{m.timestamp}</p>
+							</div>
+						))}
 
-            let accumulatedText = '';
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                const chunk = decoder.decode(value);
-                const lines = chunk.split('\n');
-                for (const line of lines) {
-                    if (line.startsWith('data: ')) {
-                        try {
-                            const data = JSON.parse(line.slice(6));
-                            if (data.error) throw new Error(data.error);
-                            if (data.text) {
-                                accumulatedText += data.text;
-                                setMessages((prev) =>
-                                    prev.map((msg) => (msg.id === botMessageId ? { ...msg, text: accumulatedText, isStreaming: true } : msg))
-                                );
-                            }
-                            if (data.done) {
-                                setMessages((prev) =>
-                                    prev.map((msg) => (msg.id === botMessageId ? { ...msg, text: accumulatedText, isStreaming: false } : msg))
-                                );
-                                break;
-                            }
-                        } catch (err) {
-                            continue;
-                        }
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('Error sending message:', error);
-            setMessages((prev) =>
-                prev.map((msg) =>
-                    msg.id === botMessageId
-                        ? {
-                            ...msg,
-                            text: "I'm sorry, I'm having trouble responding right now. Please try again later.",
-                            isStreaming: false,
-                        }
-                        : msg
-                )
-            );
-        } finally {
-            setIsLoading(false);
-            setNewMessage('');
-        }
-    };
+						{messages.length === 1 && !loading && (
+							<div className="flex flex-wrap gap-2">
+								{chatSuggestions.map((s, i) => (
+									<Button
+										key={i}
+										variant="outline"
+										size="sm"
+										disabled={cooldown > 0}
+										onClick={() => setInput(s)}
+										className="text-xs"
+									>
+										{s}
+									</Button>
+								))}
+							</div>
+						)}
+					</div>
+				</ScrollArea>
+			</ExpandableChatBody>
 
-    return (
-        <ExpandableChat
-            className="hover:cursor-pointer max-w-[calc(100vw-2rem)] sm:max-w-[calc(100vw-4rem)] md:max-w-xl max-h-[95vh] mt-4 ml-4"
-            position="bottom-right"
-            size="lg"
-            icon={<ChatBubbleIcon className="h-6 w-6" />}
-        >
-            <ExpandableChatHeader>
-                <div className="flex items-center space-x-3">
-                    <Avatar className="h-8 w-8 border-2 border-primary bg-blue-300 dark:bg-yellow-300">
-                        <AvatarImage src="/assets/logo.png" alt="Assistant" />
-                        <AvatarFallback>AI</AvatarFallback>
-                    </Avatar>
-                    <div>
-                        <h3 className="font-semibold text-sm">{heroConfig.name}'s Portfolio Assistant</h3>
-                        <div className="text-xs text-muted-foreground">
-                            <div className="flex items-center gap-1">
-                                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" /> Online
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </ExpandableChatHeader>
-
-            <ExpandableChatBody>
-                <ScrollArea ref={scrollAreaRef} className="h-full p-4">
-                    <div className="space-y-4">
-                        {messages.map((message) => (
-                            <div
-                                key={message.id}
-                                className={cn(
-                                    'flex w-max max-w-xs flex-col gap-2 rounded-lg px-3 py-2 text-sm',
-                                    message.sender === 'user' ? 'ml-auto text-secondary bg-muted' : 'bg-muted'
-                                )}
-                            >
-                                <div className="flex items-start space-x-2">
-                                    {message.sender === 'bot' && (
-                                        <Avatar className="h-6 w-6 border-2 border-primary bg-blue-300 dark:bg-yellow-300">
-                                            <AvatarImage src="/assets/logo.png" alt="Assistant" />
-                                            <AvatarFallback>AI</AvatarFallback>
-                                        </Avatar>
-                                    )}
-                                    <div className="flex-1 md:max-w-sm max-w-xs">
-                                        <div className="flex items-center gap-2">
-                                            <div className="flex-1 prose prose-sm max-w-none dark:prose-invert">
-                                                {message.text ? (
-                                                    <ReactMarkdown
-                                                        components={{
-                                                            a: (props) => (
-                                                                <a
-                                                                    {...props}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="text-blue-500 hover:text-blue-700 underline break-words"
-                                                                />
-                                                            ),
-                                                            p: (props) => <p {...props} className="m-0 leading-relaxed" />,
-                                                            ul: (props) => <ul {...props} className="m-0 pl-4" />,
-                                                            ol: (props) => <ol {...props} className="m-0 pl-4" />,
-                                                            li: (props) => <li {...props} className="m-0" />,
-                                                            strong: (props) => <strong {...props} className="font-semibold" />,
-                                                        }}
-                                                    >
-                                                        {message.text}
-                                                    </ReactMarkdown>
-                                                ) : (
-                                                    message.isStreaming && <span className="text-muted-foreground">Thinking...</span>
-                                                )}
-                                            </div>
-                                        </div>
-                                        <p className={cn('text-xs mt-1', message.sender === 'user' ? 'text-secondary' : 'text-muted-foreground')}>
-                                            {message.timestamp}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-
-                        {messages.length === 1 && !isLoading && (
-                            <div className="space-y-2">
-                                <p className="text-xs text-muted-foreground px-3">Quick questions:</p>
-                                <div className="flex flex-wrap gap-2 px-3">
-                                    {chatSuggestions.map((suggestion, index) => (
-                                        <Button
-                                            key={index}
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() => handleSuggestionClick(suggestion)}
-                                            disabled={cooldownSeconds > 0}
-                                            className="text-xs h-8 px-3 bg-background hover:bg-muted border-muted-foreground/20"
-                                        >
-                                            {suggestion}
-                                        </Button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </ScrollArea>
-            </ExpandableChatBody>
-
-            <ExpandableChatFooter>
-                {cooldownSeconds > 0 && (
-                    <p className="text-xs text-amber-600 dark:text-amber-400 mb-2 text-center">
-                        Rate limited. Please wait {cooldownSeconds}s...
-                    </p>
-                )}
-                <div className="flex space-x-2">
-                    <Input
-                        placeholder="Ask me about my work and experience..."
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        onKeyPress={handleKeyPress}
-                        disabled={isLoading || cooldownSeconds > 0}
-                        className="flex-1"
-                    />
-                    <Button
-                        size="sm"
-                        onClick={handleSendMessage}
-                        disabled={!newMessage.trim() || isLoading || cooldownSeconds > 0}
-                    >
-                        {isLoading ? (
-                            <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                        ) : (
-                            <SendIcon className="h-4 w-4" />
-                        )}
-                    </Button>
-                </div>
-            </ExpandableChatFooter>
-        </ExpandableChat>
-    );
+			<ExpandableChatFooter>
+				{cooldown > 0 && (
+					<p className="text-xs text-center text-amber-600 mb-2">
+						Please wait {cooldown}s...
+					</p>
+				)}
+				<div className="flex gap-2">
+					<Input
+						placeholder="Type your message..."
+						value={input}
+						onChange={e => setInput(e.target.value)}
+						onKeyPress={handleKey}
+						disabled={loading || cooldown > 0}
+						className="flex-1"
+					/>
+					<Button
+						size="icon"
+						disabled={!input.trim() || loading || cooldown > 0}
+						onClick={handleSend}
+					>
+						{loading ? (
+							<div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+						) : (
+							<SendIcon className="h-4 w-4" />
+						)}
+					</Button>
+				</div>
+			</ExpandableChatFooter>
+		</ExpandableChat>
+	);
 }

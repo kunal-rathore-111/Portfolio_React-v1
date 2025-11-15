@@ -8,6 +8,8 @@ export const about = {
 
 export const heroConfig = {
     name: about.name,
+    avatar: '/assets/logo.png',
+    fallback: 'YN',
     skills: [
         { name: 'React' },
         { name: 'Node.js' },
@@ -83,4 +85,7 @@ export const chatSuggestions = [
     'What technologies do you work with?',
     'Tell me about your recent projects',
     'How can I contact you for work?',
+    'What projects have you built?',
+    'What skills do you use?',
+    'How can I contact you?',
 ];
