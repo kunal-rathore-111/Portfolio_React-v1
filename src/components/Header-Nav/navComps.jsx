@@ -8,11 +8,11 @@ import { useScrollContext } from "@/context/ScrollContext";
 import { useLenis } from "lenis/react";
 
 export const NavComps = ({ toggle }) => {
-    const { homeRef, AboutRef, ProjectsRef, ReadsRef } = useScrollContext();
+    const { HomeRef, AboutRef, ProjectsRef, ReadsRef } = useScrollContext();
 
 
     const navItems = [
-        { ref: homeRef, label: "Home", Icon: HomeIcon },
+        { ref: HomeRef, label: "Home", Icon: HomeIcon },
         { ref: AboutRef, label: "About", Icon: AboutIcon },
         { ref: ProjectsRef, label: "Projects", Icon: ProjectIcon },
         { ref: ReadsRef, label: "Reads", Icon: ReadsIcon }

@@ -1,31 +1,29 @@
-// Simplified Gemini chatbot backend (no streaming, simple rate limit, SDK usage)
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import rateLimit from 'express-rate-limit'; // <-- Add this line
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Added: trust proxy for correct IPs behind reverse proxies
-app.set('trust proxy', true);
+// Added: trust proxy for reverse proxies
+const isTrustProxy = process.env.isTrustProxy ? true : false;
+app.set('trust proxy', isTrustProxy);
 
 // Added: server-side prompt with ENV override (first-person voice)
-const SYSTEM_PROMPT =
-  process.env.SYSTEM_PROMPT ||
-  [
-    'You are the portfolio owner speaking in first person (use I/me/my).',
-    'Answer concisely (<=120 words) in Markdown and make links clickable with [text](url).',
-    'Focus on my projects, skills, experience, and availability.',
-    'If asked how to contact me, share the links provided by the client or point to the Contact section of this site.',
-    'Be friendly, professional, and helpful.',
-  ].join(' ');
+const SYSTEM_PROMPT = [
+  'You are the portfolio owner speaking in first person (use I/me/my).',
+  'Answer concisely (<=120 words) in Markdown and make links clickable with [text](url with underline).',
+  'Focus on my projects, skills, experience, and availability.',
+  'If asked how to contact me, share the links provided by the client or point to the Contact section of this site.',
+  'Be friendly, professional, and helpful.',
+].join(' ');
 
 app.use(cors({
   origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
-  methods: ['POST', 'OPTIONS'],
   credentials: true,
 }));
 
@@ -36,56 +34,33 @@ function sanitizeInput(input) {
 }
 
 function getClientIP(req) {
-  return req.ip || req.socket.remoteAddress || 'unknown';
+  return req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress || 'unknown';
 }
 
-const rateLimitMap = new Map();
-const RATE_LIMIT_WINDOW = 30000; // 30s
-const RATE_LIMIT_MAX_REQUESTS = 2;
+// Remove custom rate limit logic here
 
-// Cleanup old rate limit entries every minute
-setInterval(() => {
-  const now = Date.now();
-  for (const [ip, rl] of rateLimitMap) {
-    if (rl.resetTime < now) {
-      rateLimitMap.delete(ip);
-    }
-  }
-}, 60 * 1000);
+// Add express-rate-limit middleware
+const chatLimiter = rateLimit({
+  windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS) || 60000, // 30s
+  max: Number(process.env.RATE_LIMIT_MAX_REQUESTS) || 8, // default 8 requests per window per IP
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: (req, res) => {
+    return {
+      error: 'Too many requests. Please try again later.',
+      retryAfter: Math.ceil((req.rateLimit.resetTime - Date.now()) / 1000),
+    };
+  },
+  handler: (req, res, next, options) => {
+    res.status(options.statusCode).json(options.message(req, res));
+  },
+});
 
-app.post('/api/chat', async (req, res) => {
+// Apply rate limiter to chat endpoint
+app.post('/api/chat', chatLimiter, async (req, res) => {
   try {
-    // Rate limit
-    const ip = getClientIP(req);
-    const now = Date.now();
-    if (!rateLimitMap.has(ip)) {
-      rateLimitMap.set(ip, { count: 0, resetTime: now + RATE_LIMIT_WINDOW });
-    }
-    const rl = rateLimitMap.get(ip);
-    if (rl.resetTime < now) {
-      rl.count = 0;
-      rl.resetTime = now + RATE_LIMIT_WINDOW;
-    }
-    rl.count++;
-    if (rl.count > RATE_LIMIT_MAX_REQUESTS) {
-      const retryAfter = Math.ceil((rl.resetTime - now) / 1000);
-      res.setHeader('X-RateLimit-Limit', String(RATE_LIMIT_MAX_REQUESTS));
-      res.setHeader('X-RateLimit-Remaining', '0');
-      res.setHeader('X-RateLimit-Reset', String(rl.resetTime));
-      res.setHeader('Retry-After', String(retryAfter));
-      return res.status(429).json({
-        error: 'Too many requests. Please try again later.',
-        retryAfter,
-      });
-    }
-    const remaining = Math.max(0, RATE_LIMIT_MAX_REQUESTS - rl.count);
-    console.log(`[Request] IP ${ip} - Remaining: ${remaining}/${RATE_LIMIT_MAX_REQUESTS}`);
-
     // Moved inside handler: API key lookup and validation
-    const apiKey =
-      process.env.VITE_GEMINI_API_KEY ||
-      process.env.GOOGLE_API_KEY ||
-      process.env.GEMINI_API_KEY;
+    const apiKey = process.env.VITE_GEMINI_API_KEY;
     if (!apiKey) {
       console.error('[Error] GEMINI API KEY not configured');
       return res.status(500).json({ error: 'AI service not configured' });
@@ -141,7 +116,7 @@ app.post('/api/chat', async (req, res) => {
     }
     res.write(JSON.stringify({ done: true, fullText }) + '\n');
     res.end();
-    console.log(`[Response] IP ${ip} - Generated ${fullText.length} chars`);
+    console.log(`[Response] Generated ${fullText.length} chars`);
   } catch (error) {
     console.error('[Error]', error.message);
     if (!res.headersSent) {

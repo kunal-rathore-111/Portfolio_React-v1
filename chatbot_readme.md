@@ -103,12 +103,11 @@ Location: [server.js](server.js)
   - [`getClientIP`](server.js): extracts req.ip or socket address.
 
 - Rate limiting
-  - Window: 30s (RATE_LIMIT_WINDOW = 30000)
-  - Max requests/window: 2 (RATE_LIMIT_MAX_REQUESTS = 2)
-  - Per-IP counters with reset
-  - On limit exceeded, returns 429 with headers:
-    - X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, Retry-After
-  - Response body: { error, retryAfter }
+  - Uses [`express-rate-limit`](https://www.npmjs.com/package/express-rate-limit)
+  - Window: configurable via `RATE_LIMIT_WINDOW_MS` (default 60000 ms = 1 min)
+  - Max requests/window: configurable via `RATE_LIMIT_MAX_REQUESTS` (default 8)
+  - On limit exceeded, returns 429 with JSON body: `{ error, retryAfter }`
+  - Standard rate limit headers are sent
 
 - System prompt
   - Server has a default first-person prompt (SYSTEM_PROMPT).
@@ -262,8 +261,9 @@ It uses the existing Tailwind theme and appears above page content.
 - Model/tuning (backend)
   - Change model id or generationConfig in [server.js](server.js).
 
-- Rate limit (backend)
-  - Tweak RATE_LIMIT_WINDOW and RATE_LIMIT_MAX_REQUESTS in [server.js](server.js).
+- **Rate limit (backend)**
+  - Tweak `RATE_LIMIT_WINDOW_MS` and `RATE_LIMIT_MAX_REQUESTS` in `.env`
+  - See [server.js](server.js) for `express-rate-limit` usage
 
 - System prompt (server)
   - Set SYSTEM_PROMPT in .env for a consistent global voice.

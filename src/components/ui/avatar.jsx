@@ -8,6 +8,7 @@ export const Avatar = React.forwardRef(({ className, ...props }, ref) => (
         {...props}
     />
 ));
+
 Avatar.displayName = 'Avatar';
 
 export const AvatarImage = React.forwardRef(({ className, ...props }, ref) => (

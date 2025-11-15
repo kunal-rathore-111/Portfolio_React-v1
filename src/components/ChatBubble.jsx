@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 const initialMessages = [
 	{
 		id: 1,
-		text: `Hi! I'm ${heroConfig.name}. Ask me about my projects, skills, or experience.`,
+		text: `Hi! I'm ${heroConfig.name}. Ask me about his projects, skills, or experience.`,
 		sender: 'bot',
 		timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 	}
@@ -97,11 +97,11 @@ export default function ChatBubble() {
 						break;
 					}
 					const chunk = decoder.decode(value, { stream: true });
-					const lines = chunk.split('\n').filter((line) => line.trim() !== '');
+					const lines = chunk.split('\n').filter(Boolean);
 					for (const line of lines) {
 						try {
 							const data = JSON.parse(line);
-							if (data.text) {
+							if (data.text !== undefined) {
 								accumulatedText += data.text;
 								setMessages((prev) =>
 									prev.map((msg) =>
@@ -112,14 +112,11 @@ export default function ChatBubble() {
 							if (data.done) {
 								setMessages((prev) =>
 									prev.map((msg) =>
-										msg.id === botMessageId ? { ...msg, text: accumulatedText, isStreaming: false } : msg
+										msg.id === botMessageId ? { ...msg, isStreaming: false } : msg
 									)
 								);
-								break;
 							}
-						} catch {
-							continue;
-						}
+						} catch { /* ignore parse errors */ }
 					}
 				}
 			}
@@ -182,7 +179,7 @@ export default function ChatBubble() {
 						<AvatarFallback>AI</AvatarFallback>
 					</Avatar>
 					<div className="text-sm">
-						<p className="font-semibold">Chat with {heroConfig.name}</p>
+						<p className="font-semibold"> {heroConfig.name}</p>
 						<p className="text-xs text-muted-foreground">Ask me about my work</p>
 					</div>
 				</div>

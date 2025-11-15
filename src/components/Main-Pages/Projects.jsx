@@ -31,7 +31,7 @@ import Vite from "@/assets/icons/technologies/Vite";
 import Figma from "@/assets/icons/technologies/Figma";
 import Npm from "@/assets/icons/technologies/Npm";
 
-const ProjectsData = [
+export const ProjectsData = [
     {
         topicName: "VSCode Dark Theme",
         discription: `A modern dark theme for Visual Studio Code built with developers in mind. It offers balanced contrast, vibrant syntax colors, and smooth visual flow to keep focus during long coding hours. Designed for consistency across UI elements and readability in any environment.`,
@@ -39,11 +39,8 @@ const ProjectsData = [
             { JSON },
             { VS },
             { Cursor },
-            { Git },
             { Mdx },
-            { Vite },
-            { Figma },
-            { Npm },
+            { Git },
         ],
         github: "https://github.com/kunal-rathore-111/dark-dev-theme.git",
         deployLink: "https://marketplace.visualstudio.com/items?itemName=KunalRathore.kunal-dark-dev-theme",
