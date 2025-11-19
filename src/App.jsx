@@ -37,8 +37,8 @@ export default function App() {
                 <ChatBubble />
                 <div className="w-screen flex box-border ">
 
-                    <div className="m-5 text-lgflex justify-center fixed gap-2 bg-gray-800  dark:bg-black text-emerald-300 dark:text-lime-400  px-2 py-1.5 ring-2 rounded-xl z-111" > Project status- Working... </div>
-
+                 {/*<div className="m-5 text-lgflex justify-center fixed gap-2 bg-gray-800  dark:bg-black text-emerald-300 dark:text-lime-400  px-2 py-1.5 ring-2 rounded-xl z-111" > Project status- Working... </div>
+ */}
                     {/* dark mode toggle button */}
                     <button className="fixed z-12 dark:bg-black border-2 dark:border-white right-10 top-5 bg-gray-50 p-2 shadow-md rounded-lg transition duration-600 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
                         onClick={toggleMode}>
