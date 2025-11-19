@@ -6,10 +6,10 @@ export const ErrorPage = () => {
 
     const navigate = useNavigate();
     function navigateFunc() {
-        navigate('/home')
+        navigate('/')
     }
 
-    return <div className="dark:text-white dark:bg-black w-[95%] h-full flex items-center justify-center">
+    return <div className="dark:text-white dark:bg-black w-[95%] min-h-screen flex items-center justify-center">
         <div className="p-2 flex flex-col items-center gap-6">
             <span className="text-6xl">404</span>
             <span className="text-4xl">Page not found</span>

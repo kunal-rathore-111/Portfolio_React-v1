@@ -1,6 +1,7 @@
-import themepng from "../../assets/projects/theme.png"
-import expensifypng from "../../assets/projects/expensify.png"
-import todopng from "../../assets/projects/todo.png"
+import researchProjectPng from "../../assets/projects/researchPaperCopilot.png"
+import themeProjectPng from "../../assets/projects/theme.png"
+import expnesifyProjectPng from "../../assets/projects/expensify.png"
+import todoProjectPng from "../../assets/projects/todo.png"
 
 import TypeScript from "../../assets/icons/technologies/TypeScript";
 import React from "../../assets/icons/technologies/React";
@@ -18,6 +19,8 @@ import Cursor from '../../assets/icons/technologies/Cursor';
 import JavaScript from "@/assets/icons/technologies/JS";
 import HTML from "@/assets/icons/technologies/HTML";
 import CSS from "@/assets/icons/technologies/CSS";
+import Gemini from "@/assets/icons/technologies/Gemini";
+import Arxiv from "@/assets/icons/technologies/Arxiv";
 
 import Readmore from "../../assets/icons/technologies/Readmore";
 import LinkIcon from "../../assets/icons/technologies/Link"
@@ -33,6 +36,25 @@ import Npm from "@/assets/icons/technologies/Npm";
 
 export const ProjectsData = [
     {
+        topicName: "Research Paper Copilot (Minor Project)",
+        discription: `A powerful AI-driven backend system that helps researchers discover, analyze, and summarize academic papers using a multi-agent architecture powered by Google's Gemini AI and arXiv API.`,
+        icons: [
+            { React },
+            { Figma },
+            { NodeJs },
+            { ExpressJs },
+            { MongoDB },
+            { Gemini },
+            { Arxiv },
+        ],
+        extras: `
+                Role: Backend Developer`,
+        github: "https://github.com/kunal-rathore-111/MINOR_PROJECT",
+        deployLink: "https://minor-deploy-64gx.vercel.app",
+        readmore: "will add later",
+        image: researchProjectPng,
+    },
+    {
         topicName: "VSCode Dark Theme",
         discription: `A modern dark theme for Visual Studio Code built with developers in mind. It offers balanced contrast, vibrant syntax colors, and smooth visual flow to keep focus during long coding hours. Designed for consistency across UI elements and readability in any environment.`,
         icons: [
@@ -45,14 +67,16 @@ export const ProjectsData = [
         github: "https://github.com/kunal-rathore-111/dark-dev-theme.git",
         deployLink: "https://marketplace.visualstudio.com/items?itemName=KunalRathore.kunal-dark-dev-theme",
         readmore: "will add later",
-        image: themepng,
+        image: themeProjectPng,
     },
 
     {
         topicName: "Todo Web-Application",
-        discription: `A full-stack Todo application featuring secure user authentication, and a responsive design for seamless task management. Track their daily tasks efficiently.
-
-        Example Creds, Email- kunalx1@gmail.com password- Kunal@1234`,
+        discription: `A full-stack Todo application featuring secure user authentication, and a responsive design for seamless task management. Track their daily tasks efficiently.`,
+        extras: `
+        Demo Creds,
+        Email- kunalx1@gmail.com,
+                 Password- Kunal@1234`,
         icons: [
             { HTML },
             { CSS },
@@ -60,26 +84,29 @@ export const ProjectsData = [
             { NodeJs },
             { ExpressJs },
             { MongoDB },
+            { Postman },
         ],
         github: `https://github.com/kunal-rathore-111/Todo_Project`,
         deployLink: `https://todo-project-kohl.vercel.app/`,
         readmore: "will add later",
-        image: todopng,
+        image: todoProjectPng,
     },
     {
         topicName: "Expensify - Expense Tracker Application",
         discription: `A comprehensive full-stack expense tracking application designed to help users manage their finances effectively. Featured with a robust backend API and an intuitive frontend interface to help users organize and monitor their expenses efficiently.`,
         icons: [
+            { Npm },
             { React },
-            { JavaScript },
             { NodeJs },
             { ExpressJs },
             { MongoDB },
+            { Postman },
         ],
+
         github: `https://github.com/kunal-rathore-111/Expensify_Update_Project-2`,
-        deployLink: `https://expensify-update-project-2.vercel.app`,
+        deployLink: `https://expensify-update-project-2-frontend.vercel.app`,
         readmore: "will add later",
-        image: expensifypng,
+        image: expnesifyProjectPng,
     },
 
 ]
@@ -102,7 +129,6 @@ export const ProjectsPage = () => {
 }
 
 
-/* creating two comps left and right tried to do with one using the conditional tailwind but will became very messy so the idea is to create two comps other is copy of first just little changes in positions and reder conditionally in the Projects Page */
 const ProjectInfoDiv = () => {
     const { index } = useProject();
     return (
@@ -145,11 +171,13 @@ const ProjectDiscriptionDiv = () => {
     const { props, index } = useProject();
     return <div className={`flex flex-col ${index ? "items-end" : "items-start"} gap-6 ml-2`}>
 
-        < div className={`bg-green-400 dark:bg-gray-900 shadow-sm shadow-slate-900 rounded-sm p-4 flex flex-col ${index ? "items-end" : "items-start"} gap-6 `}  >
+        <div className={`bg-green-400 dark:bg-gray-900 shadow-sm shadow-slate-900 rounded-sm p-4 flex flex-col ${index ? "items-end" : "items-start"} gap-6 `}  >
 
-            <p className="whitespace-pre-line">{props?.discription}</p>
-
-            < TechnologyIcons />
+            <p>{props?.discription}
+                {/* extras like the demo email, role and all */}
+                {props?.extras ? <p className="whitespace-pre-line">{props.extras}</p> : ""}
+            </p>
+            <TechnologyIcons />
 
         </div >
         <LinksForMoreDiv />
